@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import './App.css';
+import './bootstrap.min.css';
+
+import Header from './components/Header';
+import NewAppointment from './components/NewAppointment';
+import ListAppointment from './components/ListAppointment';
+
+class App extends Component {
+	state = {
+        appointments : []
+    }
+    
+    //OnLoad App
+    componentDidMount() {
+        const appointments = JSON.parse(localStorage.getItem('appointments'));
+        this.setState({ appointments });
+    }
+
+    //OnUpdate App
+    componentDidUpdate() {
+        localStorage.setItem('appointments', JSON.stringify(this.state.appointments));
+    }
+
+    createNewAppointment = newAppointment => {
+        const appointments = [...this.state.appointments, newAppointment]
+        this.setState({ appointments });
+    }
+
+    removeAppointment = id => {
+        console.log(id);
+        let appointments = [...this.state.appointments];
+        appointments = appointments.filter(appointment => appointment.id !== id);
+        this.setState({ appointments });
+    }
+
+	render() {
+        const { appointments } = this.state;
+		return (
+			<div className="container">
+				<Header title="Un Titulo" />
+                <div className="row">
+                    <div className="col-md-10 mx-auto">
+                        <NewAppointment createNewAppointment={this.createNewAppointment}/>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-10 mx-auto">
+                        <ListAppointment appointments={appointments} removeAppointment={this.removeAppointment}/>
+                    </div>
+                </div>
+			</div>
+		)
+	}
+};
 
 export default App;
