@@ -14,7 +14,7 @@ class App extends Component {
     
     //OnLoad App
     componentDidMount() {
-        const appointments = JSON.parse(localStorage.getItem('appointments'));
+        const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
         this.setState({ appointments });
     }
 
